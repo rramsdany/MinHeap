@@ -6,6 +6,11 @@ public class MinHeap {
     private int size = 0;
 
     private GenericItemType[] items = new GenericItemType[capacity];
+    private int index;
+    public int getIndex(){return index;}
+    public GenericItemType get(int index){
+        return items[index];
+    }
 
     private int getLeftChildIndex(int parentIndex){
         return 2 * parentIndex + 1;
@@ -98,6 +103,17 @@ public class MinHeap {
         }
 
     }
+
+    public void iterator_initialize(){
+        index = 0;
+    }
+    public boolean iterator_hasNext(){
+        return index <= size - 1;
+    }
+    public GenericItemType iterator_getNext(){
+        return items[index++];
+    }
+
 
 
 }
