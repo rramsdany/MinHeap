@@ -1,10 +1,9 @@
 import java.util.Arrays;
 
-public class MinHeap {
+public class MaxHeap {
 
     private int capacity = 10;
     private int size = 0;
-
     private GenericItemType[] items = new GenericItemType[capacity];
     private int index;
 
@@ -74,7 +73,7 @@ public class MinHeap {
 
     public void heapifyUp(){
         int index = size - 1;
-        while(hasParent(index) && parent(index).isGreater(items[index])){
+        while(hasParent(index) && parent(index).isLess(items[index])){
             swap(getParentIndex(index), index);
             index = getParentIndex(index);
         }
@@ -84,10 +83,10 @@ public class MinHeap {
         int index = 0;
         while(hasLeftChild(index)){
             int smallerChildIndex = getLeftChildIndex(index);
-            if(hasRightChild(index) && rightChild(index).isLess(leftChild(index)))
+            if(hasRightChild(index) && rightChild(index).isGreater(leftChild(index)))
                 smallerChildIndex = getRightChildIndex(index);
 
-            if(items[index].isLess(items[smallerChildIndex]))
+            if(items[index].isGreater(items[smallerChildIndex]))
                 break;
             else
                 swap(index, smallerChildIndex);
@@ -108,7 +107,4 @@ public class MinHeap {
     public GenericItemType iterator_getNext(){
         return items[index++];
     }
-
-
-
 }

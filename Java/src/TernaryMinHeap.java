@@ -1,32 +1,27 @@
 import java.util.Arrays;
 
-public class MinHeap {
-
+public class TernaryMinHeap {
     private int capacity = 10;
     private int size = 0;
-
     private GenericItemType[] items = new GenericItemType[capacity];
     private int index;
 
-
     private int getLeftChildIndex(int parentIndex){
-        return 2 * parentIndex + 1;
+        return 3 * parentIndex + 1;
     }
-
+    private int getMiddleChildIndex(int parentIndex){ return 3 * parentIndex + 2; }
     private int getRightChildIndex(int parentIndex){
-        return 2 * parentIndex + 2;
+        return 3 * parentIndex + 3;
     }
-
     private int getParentIndex(int childIndex){
-        return (childIndex - 1) / 2;
+        return (childIndex - 1) / 3;
     }
 
     private boolean hasLeftChild(int index){
         return getLeftChildIndex(index) < size;
     }
-
+    private boolean hasMiddleChild(int index) { return getMiddleChildIndex(index) < size; }
     private boolean hasRightChild(int index){ return getRightChildIndex(index) < size; }
-
     private boolean hasParent(int index){
         return getParentIndex(index) >= 0;
     }
@@ -34,13 +29,19 @@ public class MinHeap {
     private GenericItemType leftChild(int index){
         return items[getLeftChildIndex(index)];
     }
-
+    private GenericItemType middleChild(int index) { return items[getMiddleChildIndex(index)]; }
     private GenericItemType rightChild(int index){
         return items[getRightChildIndex(index)];
     }
-
     private GenericItemType parent(int index){
         return items[getParentIndex(index)];
+    }
+
+    private void ensureExtraCapacity(){
+        if(size == capacity){
+            items = Arrays.copyOf(items, capacity * 3);
+            capacity *= 3;
+        }
     }
 
     private void swap(int indexOne, int indexTwo){
@@ -49,10 +50,28 @@ public class MinHeap {
         items[indexTwo] = temp;
     }
 
-    private void ensureExtraCapacity(){
-        if(size == capacity){
-            items = Arrays.copyOf(items, capacity * 2);
-            capacity *= 2;
+
+    private void heapifyUp(){
+        int index = size - 1;
+        while(hasParent(index) && parent(index).isGreater(items[index])){
+            swap(getParentIndex(index), index);
+            index = getParentIndex(index);
+        }
+    }
+
+    private void heapifyDown(){
+        int index = 0;
+        while(hasLeftChild(index)){
+            int smallerChildIndex = getLeftChildIndex(index);
+            if(hasRightChild(index) && rightChild(index).isLess(leftChild(index)))
+                smallerChildIndex = getRightChildIndex(index);
+
+            if(items[index].isLess(items[smallerChildIndex]))
+                break;
+            else
+                swap(index, smallerChildIndex);
+
+            index = smallerChildIndex;
         }
     }
 
@@ -72,33 +91,6 @@ public class MinHeap {
         heapifyUp();
     }
 
-    public void heapifyUp(){
-        int index = size - 1;
-        while(hasParent(index) && parent(index).isGreater(items[index])){
-            swap(getParentIndex(index), index);
-            index = getParentIndex(index);
-        }
-    }
-
-    public void heapifyDown(){
-        int index = 0;
-        while(hasLeftChild(index)){
-            int smallerChildIndex = getLeftChildIndex(index);
-            if(hasRightChild(index) && rightChild(index).isLess(leftChild(index)))
-                smallerChildIndex = getRightChildIndex(index);
-
-            if(items[index].isLess(items[smallerChildIndex]))
-                break;
-            else
-                swap(index, smallerChildIndex);
-
-            index = smallerChildIndex;
-
-
-        }
-
-    }
-
     public void iterator_initialize(){
         index = 0;
     }
@@ -108,7 +100,4 @@ public class MinHeap {
     public GenericItemType iterator_getNext(){
         return items[index++];
     }
-
-
-
 }
