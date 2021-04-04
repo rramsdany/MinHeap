@@ -54,7 +54,7 @@ public class TernaryMaxHeap {
     }
 
     private void heapifyUp(){
-        int index = size - 1;
+        int index = size - 1;       // Heaps insert at the very end of the heap
         while(hasParent(index) && parent(index).isLess(items[index])){
             swap(getParentIndex(index), index);
             index = getParentIndex(index);
@@ -64,20 +64,32 @@ public class TernaryMaxHeap {
     private void heapifyDown(){
         int index = 0;
         while(hasLeftChild(index)){
-            int smallerChildIndex = getLeftChildIndex(index);
-            if(hasRightChild(index) && rightChild(index).isGreater(leftChild(index)))
-                smallerChildIndex = getRightChildIndex(index);
+            int value = getLeftChildIndex(index);
 
-            if(items[index].isGreater(items[smallerChildIndex]))
+            // Find the largest between left, middle, and right children
+            if( hasMiddleChild(index) && hasRightChild(index) ){
+                if( middleChild(index).isGreater(rightChild(index)) )
+                    value = getMiddleChildIndex(index);
+            }
+            // Find the largest between left and middle children
+            else if ( hasMiddleChild(index) && !hasRightChild(index) ){
+                if( middleChild(index).isGreater(leftChild(index)))
+                    value = getMiddleChildIndex(index);
+            }
+
+
+            if(items[index].isGreater(items[value]))
                 break;
-            else
-                swap(index, smallerChildIndex);
 
-            index = smallerChildIndex;
+            else
+                swap(index, value);
+
+            index = value;
+
         }
     }
 
-    public GenericItemType peek(){
+    public GenericItemType getMax(){
         if(size == 0) throw new IllegalStateException();
         GenericItemType item = items[0];
         items[0] = items[size - 1];

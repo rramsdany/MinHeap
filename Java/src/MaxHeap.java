@@ -55,21 +55,6 @@ public class MaxHeap {
         }
     }
 
-    public GenericItemType peek(){
-        if(size == 0) throw new IllegalStateException();
-        GenericItemType item = items[0];
-        items[0] = items[size - 1];
-        size--;
-        heapifyDown();
-        return item;
-    }
-
-    public void add(GenericItemType item){
-        ensureExtraCapacity();
-        items[size] = item;
-        size++;
-        heapifyUp();
-    }
 
     public void heapifyUp(){
         int index = size - 1;
@@ -97,6 +82,24 @@ public class MaxHeap {
         }
 
     }
+
+    public GenericItemType peek(){
+        if(size == 0) throw new IllegalStateException();
+        GenericItemType item = items[0];
+        items[0] = items[size - 1];
+        size--;
+        heapifyDown();
+        return item;
+    }
+
+    public void add(GenericItemType item){
+        ensureExtraCapacity();
+        items[size] = item;
+        size++;
+        heapifyUp();
+    }
+
+
 
     public void iterator_initialize(){
         index = 0;
