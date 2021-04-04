@@ -6,6 +6,8 @@ public class TernaryMaxHeap {
     private int size = 0;
     private GenericItemType[] items = new GenericItemType[capacity];
     private int index;
+    public int getSize() {return size;}
+    public int getCapacity() {return capacity;}
 
     private int getLeftChildIndex(int parentIndex){
         return 3 * parentIndex + 1;
@@ -40,7 +42,7 @@ public class TernaryMaxHeap {
 
     private void ensureExtraCapacity(){
         if(size == capacity){
-            items = Arrays.copyOf(items, capacity * 3);
+            items = Arrays.copyOf(items, (capacity * 3));
             capacity *= 3;
         }
     }
